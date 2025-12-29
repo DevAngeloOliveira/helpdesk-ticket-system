@@ -18,6 +18,7 @@ Sistema profissional de gerenciamento de chamados técnicos desenvolvido com Spr
 - [Dados Iniciais](#-dados-iniciais)
 - [Configuração](#️-configuração)
 - [Segurança](#-segurança)
+- [Documentação Técnica](#-documentação-técnica)
 - [Melhorias Futuras](#-melhorias-futuras)
 
 ## 🎯 Visão Geral
@@ -939,6 +940,36 @@ services:
 volumes:
   postgres_data:
 ```
+
+---
+
+## 📚 Documentação Técnica
+
+Para informações técnicas detalhadas sobre arquitetura, implementação e especificações do sistema, consulte:
+
+### [📖 Documentação Técnica Completa](DOCUMENTACAO_TECNICA.md)
+
+A documentação técnica inclui:
+
+- ✅ Requisitos funcionais e não-funcionais implementados (IEEE 830/29148)
+- 🏗️ Arquitetura em camadas detalhada com diagramas
+- 📦 Estrutura completa de pacotes e classes
+- 🗄️ Modelo de dados com DDL e relacionamentos
+- 🔄 Fluxos de dados e diagramas de sequência
+- 🔐 Implementação de segurança (JWT, BCrypt, Spring Security 7)
+- ⚡ Otimizações de performance
+- 📊 Estatísticas do projeto (74 arquivos, 5.755 linhas)
+- 🧪 Estratégias de testes
+- 🚀 Configurações de produção
+- 📈 Roadmap técnico
+
+**Recomendado para:**
+- Desenvolvedores que querem entender a implementação
+- Arquitetos avaliando o design do sistema
+- Tech leads planejando manutenção ou extensões
+- Documentação de conformidade com requisitos
+
+---
 
 ## 🎓 Melhorias Futuras
 
