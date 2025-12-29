@@ -1,0 +1,750 @@
+# API Ticketing System - Exemplos de Requisições
+
+## Base URL
+http://localhost:8080/api
+
+# ⚠️ IMPORTANTE: Autenticação JWT
+# Todas as rotas (exceto /api/auth/**) exigem autenticação
+# 1. Faça login em /api/auth/login
+# 2. Copie o token retornado
+# 3. Use o token no header Authorization: Bearer {token}
+
+# ========================================
+# VARIÁVEIS (substitua os valores)
+# ========================================
+@baseUrl = http://localhost:8080/api
+@token = SEU_TOKEN_JWT_AQUI
+
+---
+
+## 0. AUTENTICAÇÃO (Endpoints Públicos)
+
+### Login - Admin
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@ticketsystem.com",
+  "password": "admin123"
+}
+
+### Login - Técnico
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "tech@ticketsystem.com",
+  "password": "tech123"
+}
+
+### Login - Usuário
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "user123"
+}
+
+### Registrar novo usuário
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Novo Usuário",
+  "email": "novo@example.com",
+  "password": "senha123",
+  "role": "USER"
+}
+
+### Home (Público)
+GET http://localhost:8080/
+
+---
+
+## 1. USERS (Usuários) - REQUER JWT
+
+### Listar todos os usuários
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+### Buscar usuário por ID
+GET {{baseUrl}}/users/1
+Authorization: Bearer {{token}}
+
+### Buscar usuário por email
+GET {{baseUrl}}/users/email/admin@ticketsystem.com
+Authorization: Bearer {{token}}
+
+### Criar novo usuário
+POST {{baseUrl}}/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Maria Silva",
+  "email": "maria@example.com",
+  "password": "senha123",
+  "role": "USER"
+}
+
+### Atualizar usuário
+PUT {{baseUrl}}/users/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Admin User Updated",
+  "email": "admin@ticketsystem.com",
+  "password": "admin123",
+  "role": "ADMIN"
+}
+
+### Deletar usuário
+DELETE {{baseUrl}}/users/5
+Authorization: Bearer {{token}}
+
+---
+
+## 2. STATUS - REQUER JWT
+
+### Listar todos os status
+GET {{baseUrl}}/statuses
+Authorization: Bearer {{token}}
+
+### Buscar status por ID
+GET {{baseUrl}}/statuses/1
+Authorization: Bearer {{token}}
+
+### Criar novo status
+POST {{baseUrl}}/statuses
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Pending"
+}
+
+### Atualizar status
+PUT {{baseUrl}}/statuses/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Open - Updated"
+}
+
+---
+
+## 3. PRIORITIES (Prioridades) - REQUER JWT
+
+### Listar todas as prioridades
+GET {{baseUrl}}/priorities
+Authorization: Bearer {{token}}
+
+### Buscar prioridade por ID
+GET {{baseUrl}}/priorities/1
+Authorization: Bearer {{token}}
+
+### Criar nova prioridade
+POST {{baseUrl}}/priorities
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Urgent",
+  "level": 0
+}
+
+### Atualizar prioridade
+PUT {{baseUrl}}/priorities/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Low Priority",
+  "level": 4
+}
+
+---
+
+## 4. CATEGORIES (Categorias) - REQUER JWT
+
+### Listar todas as categorias
+GET {{baseUrl}}/categories
+Authorization: Bearer {{token}}
+
+### Buscar categoria por ID
+GET {{baseUrl}}/categories/1
+Authorization: Bearer {{token}}
+
+### Criar nova categoria
+POST {{baseUrl}}/categories
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Database",
+  "description": "Issues related to database systems"
+}
+
+### Atualizar categoria
+PUT {{baseUrl}}/categories/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Hardware Issues",
+  "description": "All hardware related problems"
+}
+
+---
+
+## 5. TICKETS (Chamados) - REQUER JWT
+
+### Listar todos os chamados
+GET {{baseUrl}}/tickets
+Authorization: Bearer {{token}}
+
+### Buscar chamado por ID
+GET {{baseUrl}}/tickets/1
+Authorization: Bearer {{token}}
+
+### Chamados de um usuário específico
+GET {{baseUrl}}/tickets/user/3
+Authorization: Bearer {{token}}
+
+### Chamados atribuídos a um técnico
+GET {{baseUrl}}/tickets/assigned/2
+Authorization: Bearer {{token}}
+
+### Chamados por status
+GET {{baseUrl}}/tickets/status/1
+Authorization: Bearer {{token}}
+
+### Criar novo chamado
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Sistema lento após atualização",
+  "description": "Desde a última atualização do Windows, o sistema está muito lento. O computador demora mais de 5 minutos para iniciar.",
+  "userId": 3,
+  "categoryId": 2,
+  "priorityId": 2,
+  "assignedToId": 2
+}
+
+### Atualizar chamado
+PUT {{baseUrl}}/tickets/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Laptop not turning on - URGENT",
+  "description": "My laptop won't start after the last update. Tried multiple times.",
+  "userId": 3,
+  "categoryId": 1,
+  "priorityId": 1,
+  "assignedToId": 2
+}
+
+### Atualizar status do chamado (gera histórico)
+PATCH {{baseUrl}}/tickets/status
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "ticketId": 1,
+  "newStatusId": 3,
+  "changedByUserId": 2
+}
+
+### Ver histórico de mudanças de status
+GET {{baseUrl}}/tickets/1/history
+Authorization: Bearer {{token}}
+
+### Deletar chamado
+DELETE {{baseUrl}}/tickets/4
+Authorization: Bearer {{token}}
+
+---
+
+## 6. COMMENTS (Comentários) - REQUER JWT
+
+### Listar comentários de um chamado
+GET {{baseUrl}}/comments/ticket/1
+Authorization: Bearer {{token}}
+
+### Buscar comentário por ID
+GET {{baseUrl}}/comments/1
+Authorization: Bearer {{token}}
+
+### Adicionar comentário
+POST {{baseUrl}}/comments
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "message": "Já estou verificando o problema. Parece ser um driver de vídeo incompatível.",
+  "ticketId": 1,
+  "userId": 2
+}
+
+### Adicionar outro comentário
+POST {{baseUrl}}/comments
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "message": "Obrigado! Fico no aguardo da solução.",
+  "ticketId": 1,
+  "userId": 3
+}
+
+### Deletar comentário
+DELETE {{baseUrl}}/comments/1
+Authorization: Bearer {{token}}
+
+---
+
+## 7. ATTACHMENTS (Anexos) - REQUER JWT
+
+### Listar anexos de um chamado
+GET {{baseUrl}}/attachments/ticket/1
+Authorization: Bearer {{token}}
+
+### Buscar anexo por ID
+GET {{baseUrl}}/attachments/1
+Authorization: Bearer {{token}}
+
+### Adicionar anexo
+POST {{baseUrl}}/attachments
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "fileName": "screenshot-error.png",
+  "fileUrl": "https://storage.example.com/files/screenshot-error.png",
+  "ticketId": 1
+}
+
+### Adicionar log file
+POST {{baseUrl}}/attachments
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "fileName": "system-log.txt",
+  "fileUrl": "https://storage.example.com/files/system-log.txt",
+  "ticketId": 1
+}
+
+### Deletar anexo
+DELETE {{baseUrl}}/attachments/1
+Authorization: Bearer {{token}}
+
+---
+
+## 8. WORKFLOW COMPLETO - Exemplo de uso (COM JWT)
+
+### PASSO 0: Fazer login e obter token
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@ticketsystem.com",
+  "password": "admin123"
+}
+
+# ⚠️ COPIE o valor do campo "token" da resposta acima
+# e substitua em todas as requisições abaixo onde está {{token}}
+
+###
+
+### 1. Criar usuário técnico
+POST {{baseUrl}}/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Carlos Tech",
+  "email": "carlos@tech.com",
+  "password": "tech123",
+  "role": "TECHNICIAN"
+}
+
+### 2. Criar usuário comum
+POST {{baseUrl}}/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Pedro Santos",
+  "email": "pedro@example.com",
+  "password": "user123",
+  "role": "USER"
+}
+
+### 3. Usuário abre chamado
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Impressora não responde",
+  "description": "A impressora do setor financeiro não está respondendo aos comandos de impressão",
+  "userId": 5,
+  "categoryId": 1,
+  "priorityId": 2
+}
+
+### 4. Admin atribui chamado ao técnico
+PUT {{baseUrl}}/tickets/4
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Impressora não responde",
+  "description": "A impressora do setor financeiro não está respondendo aos comandos de impressão",
+  "userId": 5,
+  "categoryId": 1,
+  "priorityId": 2,
+  "assignedToId": 4
+}
+
+### 5. Técnico muda status para "Em Progresso"
+PATCH {{baseUrl}}/tickets/status
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "ticketId": 4,
+  "newStatusId": 2,
+  "changedByUserId": 4
+}
+
+### 6. Técnico adiciona comentário
+POST {{baseUrl}}/comments
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "message": "Verificando a conexão de rede da impressora",
+  "ticketId": 4,
+  "userId": 4
+}
+
+### 7. Técnico adiciona evidência (screenshot)
+POST {{baseUrl}}/attachments
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "fileName": "printer-config.jpg",
+  "fileUrl": "https://storage.example.com/printer-config.jpg",
+  "ticketId": 4
+}
+
+### 8. Técnico resolve o chamado
+PATCH {{baseUrl}}/tickets/status
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "ticketId": 4,
+  "newStatusId": 3,
+  "changedByUserId": 4
+}
+
+### 9. Técnico adiciona solução
+POST {{baseUrl}}/comments
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "message": "Problema resolvido. O cabo de rede estava solto. Reconectei e testei com sucesso.",
+  "ticketId": 4,
+  "userId": 4
+}
+
+### 10. Usuário confirma e fecha chamado
+PATCH {{baseUrl}}/tickets/status
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "ticketId": 4,
+  "newStatusId": 4,
+  "changedByUserId": 5
+}
+
+### 11. Ver todo o histórico do chamado
+GET {{baseUrl}}/tickets/4/history
+Authorization: Bearer {{token}}
+
+---
+
+## 📝 COMO USAR ESTE ARQUIVO
+
+### Opção 1: VS Code REST Client Extension
+1. Instale a extensão "REST Client" no VS Code
+2. Abra este arquivo `.http`
+3. Clique em "Send Request" acima de cada requisição
+4. Para usar variáveis:
+   - Edite a seção de variáveis no topo
+   - Substitua `{{token}}` pelo token JWT real após o login
+
+### Opção 2: Manualmente (cURL)
+```bash
+# 1. Faça login
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@ticketsystem.com","password":"admin123"}'
+
+# 2. Copie o token da resposta
+
+# 3. Use em outras requisições
+curl -X GET http://localhost:8080/api/users \
+  -H "Authorization: Bearer SEU_TOKEN_AQUI"
+```
+
+### Opção 3: Postman
+1. Importe este arquivo como coleção
+2. Configure variáveis de ambiente:
+   - `baseUrl`: http://localhost:8080/api
+   - `token`: (obtenha fazendo login)
+3. Use `{{baseUrl}}` e `{{token}}` nas requisições
+
+---
+
+## 🔐 CREDENCIAIS PADRÃO
+
+| Nome           | Email                   | Senha    | Role       |
+|----------------|-------------------------|----------|------------|
+| Admin User     | admin@ticketsystem.com  | admin123 | ADMIN      |
+| John Technician| tech@ticketsystem.com   | tech123  | TECHNICIAN |
+| Alice Johnson  | alice@example.com       | user123  | USER       |
+| Bob Smith      | bob@example.com         | user123  | USER       |
+
+---
+
+## ✅ Validações implementadas
+
+- Email deve ser único
+- Senha mínima de 6 caracteres
+- Título do chamado: 5-200 caracteres
+- Descrição do chamado: mínimo 10 caracteres
+- Campos obrigatórios validados automaticamente
+- JWT expira em 24 horas
+
+---
+
+## ⚠️ IMPORTANTE
+
+1. **Autenticação obrigatória**: Todas as rotas (exceto `/api/auth/**`) exigem token JWT
+2. **Token no header**: Sempre inclua `Authorization: Bearer {token}`
+3. **Renovação**: Faça login novamente se o token expirar (24h)
+4. **Endpoints públicos**: 
+   - `POST /api/auth/login`
+   - `POST /api/auth/register`
+   - `GET /`
+   - `GET /h2-console/**`
+
+---
+
+## 6. COMMENTS (Comentários)
+
+### Listar comentários de um chamado
+GET http://localhost:8080/api/comments/ticket/1
+
+### Buscar comentário por ID
+GET http://localhost:8080/api/comments/1
+
+### Adicionar comentário
+POST http://localhost:8080/api/comments
+Content-Type: application/json
+
+{
+  "message": "Já estou verificando o problema. Parece ser um driver de vídeo incompatível.",
+  "ticketId": 1,
+  "userId": 2
+}
+
+### Adicionar outro comentário
+POST http://localhost:8080/api/comments
+Content-Type: application/json
+
+{
+  "message": "Obrigado! Fico no aguardo da solução.",
+  "ticketId": 1,
+  "userId": 3
+}
+
+### Deletar comentário
+DELETE http://localhost:8080/api/comments/1
+
+---
+
+## 7. ATTACHMENTS (Anexos)
+
+### Listar anexos de um chamado
+GET http://localhost:8080/api/attachments/ticket/1
+
+### Buscar anexo por ID
+GET http://localhost:8080/api/attachments/1
+
+### Adicionar anexo
+POST http://localhost:8080/api/attachments
+Content-Type: application/json
+
+{
+  "fileName": "screenshot-error.png",
+  "fileUrl": "https://storage.example.com/files/screenshot-error.png",
+  "ticketId": 1
+}
+
+### Adicionar log file
+POST http://localhost:8080/api/attachments
+Content-Type: application/json
+
+{
+  "fileName": "system-log.txt",
+  "fileUrl": "https://storage.example.com/files/system-log.txt",
+  "ticketId": 1
+}
+
+### Deletar anexo
+DELETE http://localhost:8080/api/attachments/1
+
+---
+
+## 8. WORKFLOW COMPLETO - Exemplo de uso
+
+### 1. Criar usuário técnico
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Carlos Tech",
+  "email": "carlos@tech.com",
+  "password": "tech123",
+  "role": "TECHNICIAN"
+}
+
+### 2. Criar usuário comum
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Pedro Santos",
+  "email": "pedro@example.com",
+  "password": "user123",
+  "role": "USER"
+}
+
+### 3. Usuário abre chamado
+POST http://localhost:8080/api/tickets
+Content-Type: application/json
+
+{
+  "title": "Impressora não responde",
+  "description": "A impressora do setor financeiro não está respondendo aos comandos de impressão",
+  "userId": 5,
+  "categoryId": 1,
+  "priorityId": 2
+}
+
+### 4. Admin atribui chamado ao técnico
+PUT http://localhost:8080/api/tickets/4
+Content-Type: application/json
+
+{
+  "title": "Impressora não responde",
+  "description": "A impressora do setor financeiro não está respondendo aos comandos de impressão",
+  "userId": 5,
+  "categoryId": 1,
+  "priorityId": 2,
+  "assignedToId": 4
+}
+
+### 5. Técnico muda status para "Em Progresso"
+PATCH http://localhost:8080/api/tickets/status
+Content-Type: application/json
+
+{
+  "ticketId": 4,
+  "newStatusId": 2,
+  "changedByUserId": 4
+}
+
+### 6. Técnico adiciona comentário
+POST http://localhost:8080/api/comments
+Content-Type: application/json
+
+{
+  "message": "Verificando a conexão de rede da impressora",
+  "ticketId": 4,
+  "userId": 4
+}
+
+### 7. Técnico adiciona evidência (screenshot)
+POST http://localhost:8080/api/attachments
+Content-Type: application/json
+
+{
+  "fileName": "printer-config.jpg",
+  "fileUrl": "https://storage.example.com/printer-config.jpg",
+  "ticketId": 4
+}
+
+### 8. Técnico resolve o chamado
+PATCH http://localhost:8080/api/tickets/status
+Content-Type: application/json
+
+{
+  "ticketId": 4,
+  "newStatusId": 3,
+  "changedByUserId": 4
+}
+
+### 9. Técnico adiciona solução
+POST http://localhost:8080/api/comments
+Content-Type: application/json
+
+{
+  "message": "Problema resolvido. O cabo de rede estava solto. Reconectei e testei com sucesso.",
+  "ticketId": 4,
+  "userId": 4
+}
+
+### 10. Usuário confirma e fecha chamado
+PATCH http://localhost:8080/api/tickets/status
+Content-Type: application/json
+
+{
+  "ticketId": 4,
+  "newStatusId": 4,
+  "changedByUserId": 5
+}
+
+### 11. Ver todo o histórico do chamado
+GET http://localhost:8080/api/tickets/4/history
+
+---
+
+## Dicas de uso:
+
+1. **VS Code**: Instale a extensão "REST Client" para executar essas requisições diretamente
+2. **Postman**: Importe como coleção
+3. **cURL**: Converta para comandos curl conforme necessário
+4. **Insomnia**: Importe o arquivo
+
+## Validações implementadas:
+
+- Email deve ser único
+- Senha mínima de 6 caracteres
+- Título do chamado: 5-200 caracteres
+- Descrição do chamado: mínimo 10 caracteres
+- Campos obrigatórios validados automaticamente
