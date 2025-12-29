@@ -1026,19 +1026,34 @@ Contribuições são bem-vindas! Por favor:
 
 ## 📄 Licença
 
-Este projeto foi desenvolvido para fins educacionais.
+Este projeto está licenciado sob a **MIT License** - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+**Resumo da Licença MIT:**
+- ✅ Uso comercial permitido
+- ✅ Modificação permitida
+- ✅ Distribuição permitida
+- ✅ Uso privado permitido
+- ⚠️ Sem garantias
+- ⚠️ Limitação de responsabilidade
+
+**Projeto de Portfólio** - Desenvolvido para demonstração de habilidades técnicas em:
+- Arquitetura de software enterprise
+- Spring Boot e ecossistema Spring
+- Segurança com JWT e Spring Security
+- Design patterns e princípios SOLID
+- APIs RESTful
+- Persistência de dados com JPA/Hibernate
 
 ## 👨‍💻 Autor
 
-**Angelo**  
-GitHub: [@angelo](https://github.com/angelo)
+**Angelo Oliveira**  
+GitHub: [@DevAngeloOliveira](https://github.com/DevAngeloOliveira)
 
 ## 📞 Suporte
 
 Para questões e suporte:
-- 📧 Email: suporte@ticketsystem.com
-- 🐛 Issues: [GitHub Issues](https://github.com/seu-repo/issues)
-- 📖 Wiki: [GitHub Wiki](https://github.com/seu-repo/wiki)
+- 🐛 Issues: [GitHub Issues](https://github.com/DevAngeloOliveira/helpdesk-ticket-system/issues)
+- 📖 Documentação: [README.md](README.md) | [DOCUMENTACAO_TECNICA.md](DOCUMENTACAO_TECNICA.md)
 
 ---
 
