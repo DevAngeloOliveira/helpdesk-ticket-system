@@ -587,6 +587,8 @@ curl -X POST http://localhost:8080/api/auth/login \
 
 ### 2. Criar Chamado (com JWT)
 
+**⚠️ IMPORTANTE:** O usuário criador é obtido automaticamente do token JWT. Não é necessário enviar `userId`.
+
 ```bash
 curl -X POST http://localhost:8080/api/tickets \
 -H "Content-Type: application/json" \
@@ -594,7 +596,6 @@ curl -X POST http://localhost:8080/api/tickets \
 -d '{
   "title": "Computador não liga",
   "description": "Após atualização do Windows, o computador não inicia mais",
-  "userId": 3,
   "categoryId": 1,
   "priorityId": 2,
   "assignedToId": 2
@@ -968,6 +969,24 @@ A documentação técnica inclui:
 - Arquitetos avaliando o design do sistema
 - Tech leads planejando manutenção ou extensões
 - Documentação de conformidade com requisitos
+
+### [🔧 Guia de Integração Frontend](FRONTEND_INTEGRATION_GUIDE.md)
+
+Guia completo para integração com aplicações frontend (Angular, React, Vue):
+
+- ✅ **Correção aplicada:** "usuário não logado" ao criar tickets - Janeiro 2026
+- 🔐 Como funciona a autenticação JWT passo a passo
+- 🚀 Exemplos completos em TypeScript/Angular (prontos para usar)
+- 📝 Services, Interceptors e Components completos
+- 🧪 Testes de integração e troubleshooting
+- ⚠️ Solução de problemas comuns
+- 📋 Checklist de implementação
+
+**Recomendado para:**
+- Desenvolvedores frontend integrando com a API
+- Resolução do erro "usuário não logado"
+- Implementação correta de login e criação de tickets
+- Entendimento do fluxo JWT completo
 
 ---
 

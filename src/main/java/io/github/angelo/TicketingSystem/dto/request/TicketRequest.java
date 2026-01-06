@@ -19,7 +19,6 @@ public class TicketRequest {
     private String title;
 
     @NotBlank(message = "Description is required")
-    @Size(min = 10, message = "Description must be at least 10 characters")
     private String description;
 
     @NotNull(message = "Category ID is required")
@@ -28,7 +27,7 @@ public class TicketRequest {
     @NotNull(message = "Priority ID is required")
     private Long priorityId;
 
-    @NotNull(message = "User ID is required")
+    // userId não é mais obrigatório - será obtido do usuário autenticado
     private Long userId;
 
     private Long assignedToId;

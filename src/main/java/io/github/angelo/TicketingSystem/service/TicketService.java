@@ -7,6 +7,9 @@ import io.github.angelo.TicketingSystem.exception.ResourceNotFoundException;
 import io.github.angelo.TicketingSystem.model.*;
 import io.github.angelo.TicketingSystem.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +29,8 @@ public class TicketService {
 
     @Transactional
     public TicketResponse createTicket(TicketRequest request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + request.getUserId()));
+        // Obter usuário logado do contexto de segurança
+        User user = getCurrentAuthenticatedUser();
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + request.getCategoryId()));
@@ -131,6 +134,28 @@ public class TicketService {
 
         Ticket updatedTicket = ticketRepository.save(ticket);
         return mapToResponse(updatedTicket);
+    }
+
+    /**
+     * Obtém o usuário autenticado do SecurityContext
+     */
+    private User getCurrentAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResourceNotFoundException("User not authenticated");
+        }
+        
+        Object principal = authentication.getPrincipal();
+        
+        if (!(principal instanceof UserDetails)) {
+            throw new ResourceNotFoundException("Invalid authentication principal");
+        }
+        
+        String email = ((UserDetails) principal).getUsername();
+        
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found with email: " + email));
     }
 
     @Transactional

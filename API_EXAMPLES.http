@@ -223,6 +223,7 @@ GET {{baseUrl}}/tickets/status/1
 Authorization: Bearer {{token}}
 
 ### Criar novo chamado
+# ⚠️ ATENÇÃO: userId não é mais necessário - obtido automaticamente do JWT
 POST {{baseUrl}}/tickets
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -230,13 +231,13 @@ Authorization: Bearer {{token}}
 {
   "title": "Sistema lento após atualização",
   "description": "Desde a última atualização do Windows, o sistema está muito lento. O computador demora mais de 5 minutos para iniciar.",
-  "userId": 3,
   "categoryId": 2,
   "priorityId": 2,
   "assignedToId": 2
 }
 
 ### Atualizar chamado
+# ⚠️ userId não é mais enviado no body
 PUT {{baseUrl}}/tickets/1
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -244,7 +245,6 @@ Authorization: Bearer {{token}}
 {
   "title": "Laptop not turning on - URGENT",
   "description": "My laptop won't start after the last update. Tried multiple times.",
-  "userId": 3,
   "categoryId": 1,
   "priorityId": 1,
   "assignedToId": 2
